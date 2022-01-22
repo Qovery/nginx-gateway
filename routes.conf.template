@@ -1,0 +1,24 @@
+location ~* ^/api/v1/user/(.*)/app/(.*)/index/(.*)/search/?(.*)$ {
+    set $service "$BACKEND_API_1";
+    proxy_pass http://$service/api/v1/user/$1/app/$2/index/$3/search/$4$is_args$args;
+}
+
+location ~* ^/api/v1/vs/(.*)$ {
+    set $service "$BACKEND_API_2";
+    proxy_pass http://$service$request_uri;
+}
+
+location ~* ^/api/(.*)$ {
+    set $service "$BACKEND_API_1";
+    proxy_pass http://$service$request_uri;
+}
+
+location ~* ^/visualsearch/(.*)$ {
+    set $service "$BACKEND_API_2";
+    proxy_pass http://$service$request_uri;
+}
+
+location ~* ^/(.*)$ {
+    set $service "$BACKEND_API_1";
+    proxy_pass http://$service$request_uri;
+}
