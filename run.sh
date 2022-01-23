@@ -4,7 +4,7 @@ set -e
 
 if [ -z "$KUBERNETES_DNS_SERVICE_IP" ]; then
   nameserver=$(grep nameserver /etc/resolv.conf | awk '{print $2}' | head -1)
-  export KUBERNETES_DNS_SERVICE_IP=nameserver
+  export KUBERNETES_DNS_SERVICE_IP=$nameserver
 fi
 
 envsubst '$KUBERNETES_DNS_SERVICE_IP' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
