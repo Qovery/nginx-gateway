@@ -3,7 +3,8 @@
 set -e
 
 if [ -z "$KUBERNETES_DNS_SERVICE_IP" ]; then
-  export KUBERNETES_DNS_SERVICE_IP="127.0.0.1"
+  nameserver=$(grep nameserver /etc/resolv.conf | awk '{print $2}' | head -1)
+  export KUBERNETES_DNS_SERVICE_IP=nameserver
 fi
 
 envsubst '$KUBERNETES_DNS_SERVICE_IP' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
@@ -18,6 +19,8 @@ do
   OUTPUT=$(eval "$CMD")
   echo "$OUTPUT" > /etc/nginx/routes.conf
 done
+
+printf "nameserver: %s\n\n" $KUBERNETES_DNS_SERVICE_IP
 
 printf "--------- GENERATED ROUTES.CONF ------------\n"
 cat /etc/nginx/routes.conf
