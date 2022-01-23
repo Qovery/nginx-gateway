@@ -17,4 +17,4 @@ Check out the [NGINX documentation](https://nginx.org/en/docs/beginners_guide.ht
 
 | Key | Default Value | Mandatory |
 |-----|---------------|-----------|
-|KUBERNETES_DNS_SERVICE_IP | 127.0.0.1   | Yes
+|KUBERNETES_DNS_SERVICE_IP | 127.0.0.1   | No
