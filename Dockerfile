@@ -1,5 +1,8 @@
 FROM nginx:1.21.5-alpine
 
+# install dig
+RUN apk add bind-tools
+
 # remove default NGINX confg
 RUN rm -Rf /etc/nginx/conf.d/default.conf /usr/share/nginx/html
 
