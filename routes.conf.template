@@ -1,19 +1,4 @@
-location ~* ^/api/v1/user/(.*)/app/(.*)/index/(.*)/search/?(.*)$ {
-    proxy_pass http://$BACKEND_API_1/api/v1/user/$1/app/$2/index/$3/search/$4$is_args$args;
-}
 
-location ~* ^/api/v1/vs/(.*)$ {
-    proxy_pass http://$BACKEND_API_2$request_uri;
-}
-
-location ~* ^/api/(.*)$ {
-    proxy_pass http://$BACKEND_API_1$request_uri;
-}
-
-location ~* ^/visualsearch/(.*)$ {
-    proxy_pass http://$BACKEND_API_2$request_uri;
-}
-
-location ~* ^/(.*)$ {
-    proxy_pass http://$BACKEND_API_1$request_uri;
+location ~* ^/api/core-property-listings-api/(.*)$ {
+    proxy_pass http://$LISTINGS_API_BACKEND$request_uri;
 }
