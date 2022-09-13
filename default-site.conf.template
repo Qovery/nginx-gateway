@@ -39,12 +39,11 @@ server {
 
         # Setting headers to send to web server
         proxy_pass_request_headers off;
-        # proxy_set_header public-request $public_request;
+        proxy_set_header public-request $public_request;
         proxy_set_header authorization $authorization;
         proxy_set_header x-real-ip $remote_addr;
         proxy_set_header x-forwarded-for $proxy_add_x_forwarded_for;
         proxy_set_header x-client-email $http_x_client_email;
         proxy_set_header x-caller-id $http_x_caller_id;
-
     }
 }
