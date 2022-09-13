@@ -11,6 +11,12 @@ envsubst '$KUBERNETES_DNS_SERVICE_IP' < /etc/nginx/nginx.conf.template > /etc/ng
 
 cp /etc/nginx/routes.conf.template /etc/nginx/routes.conf
 
+envsubst "$(printf '${%s} ' $(env | cut -d'=' -f1))" < /etc/nginx/default-site.conf.template > /etc/nginx/sites-available/default
+
+cp /etc/nginx/log-format.conf.template /etc/nginx/conf.d/log-format.conf
+
+cp /etc/nginx/logs.yaml.template /etc/nginx/conf.d/logs.yaml
+
 fqdn=$(grep search /etc/resolv.conf | awk '{print $2}' | head -1)
 
 if [ -z "$fqdn" ]; then

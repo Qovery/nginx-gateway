@@ -1,0 +1,51 @@
+# Flag public requests coming from the internet
+geo $public_request {
+    default         true;
+    10.0.0.0/8      false;
+    172.0.0.0/8     false;
+}
+
+# Simple reverse proxy
+server {
+    server_name _;
+
+    access_log /var/log/nginx/nginx-dd-access.log json_custom;
+
+    # Includes environments JWT
+    set $dev_jwt $PLATFORM_AUTH_JWT_DEV;
+    set $stg_jwt $PLATFORM_AUTH_JWT_STG;
+    set $prd_jwt $PLATFORM_AUTH_JWT_PRD;
+
+    # Ports listening
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    # Proxy all requests to docker container running on 127.0.0.1:8000
+    location / {
+        # Checking authorization
+        set $authorization none;
+        if ($http_platform_authorization) {
+            set $authorization invalid;
+        }
+        if ($http_platform_authorization = $dev_jwt) {
+            set $authorization dev;
+        }
+        if ($http_platform_authorization = $stg_jwt) {
+            set $authorization stg;
+        }
+        if ($http_platform_authorization = $prd_jwt) {
+            set $authorization prd;
+        }
+
+        # Setting headers to send to web server
+        proxy_pass_request_headers off;
+        proxy_set_header public-request $public_request;
+        proxy_set_header authorization $authorization;
+        proxy_set_header x-real-ip $remote_addr;
+        proxy_set_header x-forwarded-for $proxy_add_x_forwarded_for;
+        proxy_set_header x-client-email $http_x_client_email;
+        proxy_set_header x-caller-id $http_x_caller_id;
+
+        proxy_pass http://127.0.0.1:8000;
+    }
+}
