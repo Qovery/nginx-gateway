@@ -1,5 +1,5 @@
 # Flag public requests coming from the internet
-geo $geo_public_request {
+geo $public_request {
     default         true;
     10.0.0.0/8      false;
     172.0.0.0/8     false;
@@ -15,9 +15,6 @@ server {
     set $dev_jwt $PLATFORM_AUTH_JWT_DEV;
     set $stg_jwt $PLATFORM_AUTH_JWT_STG;
     set $prd_jwt $PLATFORM_AUTH_JWT_PRD;
-
-    # Is this a public or private request
-    set $public_request $geo_public_request;
 
     # Ports listening
     listen 80 default_server;
@@ -42,7 +39,7 @@ server {
 
         # Setting headers to send to web server
         proxy_pass_request_headers off;
-        proxy_set_header public-request $public_request;
+        # proxy_set_header public-request $public_request;
         proxy_set_header authorization $authorization;
         proxy_set_header x-real-ip $remote_addr;
         proxy_set_header x-forwarded-for $proxy_add_x_forwarded_for;
