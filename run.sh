@@ -11,6 +11,7 @@ envsubst '$KUBERNETES_DNS_SERVICE_IP' < /etc/nginx/nginx.conf.template > /etc/ng
 
 cp /etc/nginx/routes.conf.template /etc/nginx/routes.conf
 
+mkdir -p /etc/nginx/sites-available
 envsubst "$(printf '${%s} ' $(env | cut -d'=' -f1))" < /etc/nginx/default-site.conf.template > /etc/nginx/sites-available/default
 
 cp /etc/nginx/log-format.conf.template /etc/nginx/conf.d/log-format.conf

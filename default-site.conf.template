@@ -46,6 +46,5 @@ server {
         proxy_set_header x-client-email $http_x_client_email;
         proxy_set_header x-caller-id $http_x_caller_id;
 
-        proxy_pass http://127.0.0.1:8000;
     }
 }
