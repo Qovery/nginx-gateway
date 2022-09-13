@@ -13,6 +13,5 @@ log_format json_custom escape=json
     '"request_time":$request_time,'
     '"response_content_type":"$sent_http_content_type",'
     '"x-forwarded-for":"$proxy_add_x_forwarded_for",'
-    '"public-request":"$public_request",'
     '"authorization":"$authorization"'
 '}';
