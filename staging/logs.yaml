@@ -1,0 +1,5 @@
+logs:
+  - type: file
+    service: syslog
+    source: nginx
+    path: /var/log/nginx/*.log

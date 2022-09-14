@@ -1,0 +1,70 @@
+# Flag public requests coming from the internet
+geo $public_request {
+    default true;
+    10.0.0.0/8 false;
+    172.0.0.0/8 false;
+}
+
+server {
+    listen 80 default_server;
+
+    root /;
+
+    include /etc/nginx/routes.conf;
+
+    expires -1;
+
+    # custom logging with datadog format
+    # access_log /var/log/nginx/nginx-dd-access.log json_custom;
+
+    # platform authorization JWT for all environments
+    set $dev_jwt $PLATFORM_AUTH_JWT_DEV;
+    set $stg_jwt $PLATFORM_AUTH_JWT_STG;
+    set $prd_jwt $PLATFORM_AUTH_JWT_PRD;
+
+    # do not send headers included in the original request
+    proxy_pass_request_headers off;
+
+    # Setting standard headers
+    add_header Pragma "no-cache";
+    add_header Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0";
+    add_header X-Xss-Protection "1; mode=block" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+
+    add_header Access-Control-Allow-Credentials "true" always;
+    add_header Access-Control-Allow-Methods "GET, POST, DELETE, PUT, PATCH, OPTIONS" always;
+    add_header Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Content-Disposition,Content-Transfer-Encoding,Authorization,Device-Id" always;
+    add_header Access-Control-Expose-Headers "Content-Length,Content-Range" always;
+
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+    # Checking platform authorization
+    set $authorization none;
+    if ($http_platform_authorization) {
+        set $authorization invalid;
+    }
+    if ($http_platform_authorization = $dev_jwt) {
+        set $authorization dev;
+    }
+    if ($http_platform_authorization = $stg_jwt) {
+        set $authorization stg;
+    }
+    if ($http_platform_authorization = $prd_jwt) {
+        set $authorization prd;
+    }
+
+    # Forcing the use of prd token
+    if ($authorization != prd ) {
+        return 403;
+    }
+
+    # Setting custom headers
+    proxy_set_header public-request $public_request;
+    proxy_set_header authorization $authorization;
+    proxy_set_header x-client-email $http_x_client_email;
+    proxy_set_header x-caller-id $http_x_caller_id;
+
+    default_type application/json;
+}

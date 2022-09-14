@@ -1,0 +1,4 @@
+
+location ~* ^/api/core-property-listings-api/(.*)$ {
+    proxy_pass http://$LISTINGS_API_BACKEND$request_uri;
+}
