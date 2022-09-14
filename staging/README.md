@@ -13,7 +13,7 @@ This repository contains everything you need to deploy an API gateway for your a
 
 Check out the [NGINX documentation](https://nginx.org/en/docs/beginners_guide.html) for more advanced configuration.
 
-### Environment variables
+### Environment variables 
 
 | Key | Default Value | Mandatory |
 |-----|---------------|-----------|
