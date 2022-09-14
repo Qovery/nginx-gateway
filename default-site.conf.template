@@ -17,6 +17,9 @@ server {
     set $prd_jwt $PLATFORM_AUTH_JWT_PRD;
 
     # Ports listening
+    listen 443 ssl default_server;
+    listen [::]:443 ssl default_server;
+
     listen 80 default_server;
     listen [::]:80 default_server;
 
