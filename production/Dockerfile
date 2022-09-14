@@ -10,7 +10,6 @@ RUN rm -Rf /etc/nginx/conf.d/default.conf /usr/share/nginx/html
 COPY nginx.conf.template /etc/nginx/nginx.conf.template
 COPY http-server.conf.template /etc/nginx/conf.d/http-server.conf.template
 COPY routes.conf.template /etc/nginx/routes.conf.template
-COPY log-format.conf /etc/nginx/conf.d/log-format.conf
 COPY logs.yaml /etc/nginx/conf.d/logs.yaml
 
 # copy NGINX commands to run
