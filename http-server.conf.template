@@ -56,7 +56,6 @@ server {
     }
 
     # Setting custom headers
-    proxy_pass_request_headers off;
     proxy_set_header public-request $public_request;
     proxy_set_header authorization $authorization;
     proxy_set_header x-client-email $http_x_client_email;
