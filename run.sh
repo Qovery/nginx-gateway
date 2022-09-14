@@ -13,10 +13,6 @@ cp /etc/nginx/routes.conf.template /etc/nginx/routes.conf
 
 envsubst "$(printf '${%s} ' $(env | cut -d'=' -f1))" < /etc/nginx/conf.d/http-server.conf.template > /etc/nginx/conf.d/http-server.conf
 
-cp /etc/nginx/log-format.conf.template /etc/nginx/conf.d/log-format.conf
-
-cp /etc/nginx/logs.yaml.template /etc/nginx/conf.d/logs.yaml
-
 fqdn=$(grep search /etc/resolv.conf | awk '{print $2}' | head -1)
 
 if [ -z "$fqdn" ]; then

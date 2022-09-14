@@ -22,6 +22,7 @@ server {
     root /;
 
     include /etc/nginx/routes.conf;
+    include /etc/nginx/log-format.conf;
 
     expires -1;
 
