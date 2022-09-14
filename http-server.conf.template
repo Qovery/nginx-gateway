@@ -6,6 +6,15 @@ geo $public_request {
 }
 
 server {
+    listen 80 default_server;
+
+    root /;
+
+    include /etc/nginx/routes.conf;
+    include /etc/nginx/log-format.conf;
+
+    expires -1;
+
     # custom logging with datadog format
     access_log /var/log/nginx/nginx-dd-access.log json_custom;
 
@@ -16,15 +25,6 @@ server {
 
     # do not send headers included in the original request
     proxy_pass_request_headers off;
-
-    listen 80 default_server;
-
-    root /;
-
-    include /etc/nginx/routes.conf;
-    include /etc/nginx/log-format.conf;
-
-    expires -1;
 
     # Setting standard headers
     add_header Pragma "no-cache";
