@@ -15,7 +15,7 @@ server {
     expires -1;
 
     # custom logging with datadog format
-    access_log /var/log/nginx/nginx-dd-access.log json_custom;
+    # access_log /var/log/nginx/nginx-dd-access.log json_custom;
 
     # platform authorization JWT for all environments
     set $dev_jwt $PLATFORM_AUTH_JWT_DEV;
