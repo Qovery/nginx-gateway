@@ -1,11 +1,10 @@
 
 location ~* ^/api/core-property-listings-api/(.*)$ {
     add_header Access-Control-Allow-Origin "*" always;
-    add_header Access-Control-Allow-Methods "OPTIONS, POST, GET, PUT, PATCH, DELETE";
-    add_header Access-Control-Max-Age "3600";
-    add_header Access-Control-Allow-Credentials "true";
-    add_header Access-Control-Allow-Headers "Content-Type";
-    add_header Access-Control-Expose-Headers "Access-Control-Allow-Origin";
+    add_header Access-Control-Allow-Methods "OPTIONS, POST, GET, PUT, PATCH, DELETE" always;
+    add_header Access-Control-Max-Age "3600" always;
+    add_header Access-Control-Allow-Credentials "true" always;
+    add_header Access-Control-Allow-Headers "Content-Type" always;
 
     # CORS policy
     if ($request_method = 'OPTIONS') {
