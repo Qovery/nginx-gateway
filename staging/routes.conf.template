@@ -1,4 +1,12 @@
 
 location ~* ^/api/core-property-listings-api/(.*)$ {
+    # for OPTIONS return these headers and HTTP 200 status
+    if ($request_method = OPTIONS ) {
+        add_header Allow "POST, OPTIONS";
+        add_header Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept";
+        add_header Access-Control-Allow-Origin "*";
+        return 200;
+    }
+
     proxy_pass http://$LISTINGS_API_BACKEND$request_uri;
 }
