@@ -10,6 +10,9 @@ server {
 
     root /;
 
+    # including all locations defined in the routes file
+    include /etc/nginx/routes.conf;
+
     expires -1;
 
     # custom logging with datadog format
@@ -29,12 +32,20 @@ server {
     add_header Access-Control-Allow-Credentials "true" always;
     add_header Access-Control-Allow-Methods "GET, POST, DELETE, PUT, PATCH, OPTIONS" always;
     add_header Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Content-Disposition,Content-Transfer-Encoding,Device-Id,Platform-Authorization,X-Client-Email,X-Caller-Id" always;
-    add_header Access-Control-Allow-Origin "*" always;
-    add_header Access-Control-Expose-Headers "Content-Length,Content-Range" always;
+    add_header Access-Control-Expose-Headers "Content-Length,Content-Range,Access-Control-Allow-Origin" always;
 
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+    # CORS policy
+    if ($http_origin ~* "^https://postman.flat.mx$") {
+        add_header Access-Control-Allow-Origin "$http_origin";
+        add_header Access-Control-Allow-Methods "OPTIONS, POST, GET";
+        add_header Access-Control-Max-Age "3600";
+        add_header Access-Control-Allow-Credentials "true";
+        add_header Access-Control-Allow-Headers "Content-Type";
+    }
 
     # Checking platform authorization
     set $authorization none;
@@ -58,7 +69,4 @@ server {
     proxy_set_header x-caller-id $http_x_caller_id;
 
     default_type application/json;
-
-    # including all locations defined in the routes file
-    include /etc/nginx/routes.conf;
 }
