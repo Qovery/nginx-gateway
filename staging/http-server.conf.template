@@ -22,9 +22,6 @@ server {
     set $stg_jwt $PLATFORM_AUTH_JWT_STG;
     set $prd_jwt $PLATFORM_AUTH_JWT_PRD;
 
-    # do not send headers included in the original request
-    proxy_pass_request_headers off;
-
     # Setting standard headers
     add_header Pragma "no-cache";
     add_header Cache-Control "no-store, no-cache, must-revalidate, post-check=0, pre-check=0";
@@ -33,9 +30,17 @@ server {
 
     add_header Access-Control-Allow-Credentials "true" always;
     add_header Access-Control-Allow-Methods "GET, POST, DELETE, PUT, PATCH, OPTIONS" always;
-    add_header Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Content-Disposition,Content-Transfer-Encoding,Authorization,Device-Id" always;
+    add_header Access-Control-Allow-Headers "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Content-Disposition,Content-Transfer-Encoding,Device-Id,Platform-Authorization,X-Client-Email,X-Caller-Id" always;
     add_header Access-Control-Allow-Origin "https://postman.flat.mx" always;
     add_header Access-Control-Expose-Headers "Content-Length,Content-Range" always;
+
+    # for OPTIONS return these headers and HTTP 200 status
+    if ($request_method = OPTIONS ) {
+        add_header Allow "POST, OPTIONS";
+        add_header Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept";
+        add_header Access-Control-Allow-Origin "*";
+        return 200;
+    }
 
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
