@@ -1,15 +1,16 @@
 
 location ~* ^/api/core-property-listings-api/(.*)$ {
+    add_header Access-Control-Allow-Origin "*" always;
+    add_header Access-Control-Allow-Methods "OPTIONS, POST, GET, PUT, PATCH, DELETE";
+    add_header Access-Control-Max-Age "3600";
+    add_header Access-Control-Allow-Credentials "true";
+    add_header Access-Control-Allow-Headers "Content-Type";
+    add_header Access-Control-Expose-Headers "Access-Control-Allow-Origin";
+
     # CORS policy
     if ($request_method = 'OPTIONS') {
-        add_header Access-Control-Allow-Origin "*" always;
-        add_header Access-Control-Allow-Methods "OPTIONS, POST, GET, PUT, PATCH, DELETE";
-        add_header Access-Control-Max-Age "3600";
-        add_header Access-Control-Allow-Credentials "true";
-        add_header Access-Control-Allow-Headers "Content-Type";
-        add_header Access-Control-Expose-Headers "Access-Control-Allow-Origin";
         return 200;
     }
 
-    proxy_pass http://$request_uri;
+    proxy_pass http://$LISTINGS_API_BACKEND$request_uri;
 }
