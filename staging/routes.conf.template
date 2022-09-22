@@ -2,3 +2,7 @@
 location ~* ^/api/core-property-listings-api/(.*)$ {
     proxy_pass http://$LISTINGS_API_BACKEND$request_uri;
 }
+
+location ~* ^/api/acq-comms-api/(.*)$ {
+    proxy_pass http://$ACQ_COMMS_API_BACKEND$request_uri;
+}
