@@ -24,4 +24,4 @@ RUN wget -q -t3 'https://packages.doppler.com/public/cli/rsa.8004D9FF50437357.ke
     apk add doppler
 
 # Use the Doppler CLI to run your application
-CMD ["doppler", "run", "--", "run.sh"]
+CMD ["doppler", "run", "--", "/etc/nginx/run.sh"]
