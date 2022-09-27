@@ -6,3 +6,8 @@ location ~* ^/api/core-property-listings-api/(.*)$ {
 location ~* ^/api/acq-comms-api/(.*)$ {
     proxy_pass http://$ACQ_COMMS_API_BACKEND$request_uri;
 }
+
+location ~* ^/api/integ-netsuite-sync/(.*)$ {
+    proxy_pass http://$INTEG_NETSUITE_SYNC_BACKEND$request_uri;
+}
+    
