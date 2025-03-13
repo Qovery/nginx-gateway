@@ -19,8 +19,8 @@ fi
 
 for var in $(env)
 do
-  ENV_VAR_KEY="\$$(echo "$var" | tr "=" " " | awk '{print $1}')"
-  ENV_VAR_VALUE=$(echo "$var" | tr "$ENV_VAR_KEY=" " " | awk '{print $1}')
+  ENV_VAR_KEY="\$$(echo "$var" | cut -d= -f1)"
+  ENV_VAR_VALUE=$(echo "$var" | cut -d= -f2-)
 
   case "$ENV_VAR_VALUE" in
   *.*)
