@@ -29,17 +29,28 @@ for name in $referenced_vars; do
     exit 1
   fi
 
-  # Accept only a host name, optionally followed by a port.
-  case "$value" in
-    *[!A-Za-z0-9.:-]*)
+  # Accept only a host name, optionally followed by a numeric port.
+  host=${value%%:*}
+  port=''
+  case "$value" in *:*) port=${value#*:} ;; esac
+
+  case "$host" in
+    ''|*[!A-Za-z0-9.-]*|.*|*.|-*|*-|*..*|*.-*|*-.*)
       echo "ERROR: $name must be a host name (optionally host:port), got an invalid value" >&2
       exit 1
       ;;
   esac
 
-  host=${value%%:*}
-  port=''
-  case "$value" in *:*) port=${value#*:} ;; esac
+  case "$value" in
+    *:*)
+      case "$port" in
+        ''|*[!0-9]*)
+          echo "ERROR: $name has an invalid port, expected host:port with a numeric port" >&2
+          exit 1
+          ;;
+      esac
+      ;;
+  esac
 
   case "$host" in
     *.*)

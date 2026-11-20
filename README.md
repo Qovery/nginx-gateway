@@ -17,15 +17,15 @@ Check out the [NGINX documentation](https://nginx.org/en/docs/beginners_guide.ht
 
 ### Environment variables
 
-Only the UPPERCASE variables referenced in `routes.conf.template` (e.g. `$BACKEND_API_1`) are replaced at startup. Lowercase NGINX variables such as `$request_uri` are left untouched, and no other environment variable is read.
+Only the UPPERCASE variables referenced in `routes.conf.template` (e.g. `$BACKEND_API_1`) are replaced at startup. Lowercase NGINX variables such as `$request_uri` are left untouched. Besides these, the startup script only reads the `<NAME>_PORT` overrides and `KUBERNETES_DNS_SERVICE_IP`.
 
 | Key | Default Value | Mandatory | Description |
 |-----|---------------|-----------|-------------|
-| `<NAME>` referenced in `routes.conf.template` | - | Yes | Backend host. A short Kubernetes service name (the value of `QOVERY_..._HOST_INTERNAL`) is completed with the namespace domain and the port is found with a DNS SRV lookup. A value containing a dot or a port (`host.example.com`, `host:8080`) is used as is. |
-| `<NAME>_PORT` | - | No | Backend port, when the SRV lookup finds none or several ports. |
+| `<NAME>` referenced in `routes.conf.template` | - | Yes | Backend host, optionally with a port. A short Kubernetes service name (the value of `QOVERY_..._HOST_INTERNAL`) is completed with the namespace domain; its port is the one given in the value, else `<NAME>_PORT`, else the DNS SRV record of the service. A host containing a dot (`host.example.com`, `host.example.com:8443`) is used as is. |
+| `<NAME>_PORT` | - | No | Backend port for a short service name. When set, it is used instead of the SRV lookup. Set it when the service exposes several ports. |
 | `KUBERNETES_DNS_SERVICE_IP` | first `nameserver` of `/etc/resolv.conf` | No | DNS server used by NGINX to resolve the backends. |
 
-The container stops at startup with an explicit error if a referenced variable is missing, is not a valid host name, or if its port cannot be found.
+The container stops at startup with an explicit error if a referenced variable is missing, is not a well-formed host name with an optional numeric port, or if the port of a short service name cannot be found.
 
 ## Security
 
