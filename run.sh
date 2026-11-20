@@ -53,7 +53,7 @@ for name in $referenced_vars; do
       port=${port:-$(printenv "${name}_PORT" || true)}
 
       if [ -z "$port" ]; then
-        port=$(dig +short +time=3 +tries=2 srv "*._tcp.$value.$fqdn" | awk '{ print $3 }' | sort -u)
+        port=$(dig +short +time=3 +tries=2 srv "$value.$fqdn" | awk '{ print $3 }' | sort -u)
       fi
 
       case "$port" in
