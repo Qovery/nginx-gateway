@@ -15,11 +15,11 @@ events {
 http {
     resolver $KUBERNETES_DNS_SERVICE_IP ipv6=off; # kubernetes internal DNS
 
-    log_format  main  '\$remote_addr - $remote_user [$time_local] "$request" '
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
                       '$status $body_bytes_sent "$http_referer" '
                       '"$http_user_agent" "$http_x_forwarded_for"';
 
-    access_log /dev/null main;
+    access_log /dev/stdout main;
     sendfile            on;
     tcp_nopush          on;
     tcp_nodelay         on;
